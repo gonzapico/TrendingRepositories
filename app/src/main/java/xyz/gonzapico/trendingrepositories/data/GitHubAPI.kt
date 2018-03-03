@@ -4,13 +4,17 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.Coroutin
 import kotlinx.coroutines.experimental.Deferred
 import retrofit2.Call
 import retrofit2.Retrofit
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Query
 
 
 object GitHubAPI{
 
-  const val URL = "http://api.openweathermap.org"
+  const val URL = "https://api.github.com"
+  const val HEADER_ACCEPT_VERSION = "Accept: application/vnd.github.v3+json"
 
   class GitHubRepositories {
     /** Array of daily forecasts */
@@ -121,12 +125,26 @@ object GitHubAPI{
 
   interface Service {
 
-    @GET("search/users")
-    fun search(@Query("q") query: String,
-        @Query("page") page: Int,
-        @Query("per_page") perPage: Int):
+    /***
+     * curl -G
+     * https://api.github.com/search/repositories
+     * --data-urlencode
+     * "sort=stars"
+     * --data-urlencode
+     * "order=desc"
+     * --data-urlencode
+     * "q=language:android"
+     * --data-urlencode
+     * "q=created:>`date -v-7d '+%Y-%m-%d'`"
+     */
+    @FormUrlEncoded
+    @GET("/search/repositories")
+    @Headers(HEADER_ACCEPT_VERSION)
+    fun search(@Query("q") language: String,
+        @Query("q") created: String,
+        @Query("sorts") sorts : String,
+        @Query("order") order : String):
         Deferred<GitHubRepositories>
-
   }
 
   private val retrofit = Retrofit.Builder()
