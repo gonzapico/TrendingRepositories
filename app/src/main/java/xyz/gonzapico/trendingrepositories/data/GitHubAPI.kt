@@ -1,12 +1,10 @@
-package xyz.gonzapico.trendingrepositories
+package xyz.gonzapico.trendingrepositories.data
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import kotlinx.coroutines.experimental.Deferred
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
@@ -151,5 +149,6 @@ object GitHubAPI{
       .baseUrl(URL)
       .addCallAdapterFactory(CoroutineCallAdapterFactory()).build()
 
-  val service = retrofit.create(Service::class.java)!!
+  val service = retrofit.create(
+      Service::class.java)!!
 }
